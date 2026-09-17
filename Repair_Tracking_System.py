@@ -58,36 +58,46 @@ def update_status():
         for i, repair in enumerate(repairs, 1):
             print(i, "-", repair[0], "-", repair[1], "-", repair[4])
 
-        number = int(input("Enter repair number: "))
+    while True:
+        try:    
+            number = int(input("Enter repair number: "))
 
-        print("\n[1] Waiting for repair")
-        print("[2] Being repaired")
-        print("[3] Completed")
+            if 1 <= number <= len(repairs):
+                break
+            else:
+                print("Invalid repair number.")
 
+        except ValueError:
+            print("Please enter a valid number.")
+
+    print("\n[1] Waiting for repair")
+    print("[2] Being repaired")
+    print("[3] Completed")
+
+    while True:
         status_choice = input("Enter new status: ")
 
         if status_choice == "1":
             repairs[number - 1][4] = "Waiting for repair"
             print("Repair status updated successfully!")
+            break
 
         elif status_choice == "2":
             repairs[number - 1][4] = "Being repaired"
             print("Repair status updated successfully!")
+            break
 
         elif status_choice == "3":
             repairs[number - 1][4] = "Completed"
-
-            repairs[number - 1][6] = datetime.now().strftime(
-                "%B %d, %Y - %I:%M %p"
-            )
-
+            repairs[number - 1][6] = datetime.now().strftime("%B %d, %Y - %I:%M %p")
             print("Repair status updated successfully!")
+            break
 
         else:
             print("Invalid status choice.")
 
 while True:
-    print("\n==============================")
+    print("\n============================")
     print("     GADGET REPAIR SHOP")
     print("==============================")
     print("[1] Add Repair")
