@@ -357,8 +357,7 @@ def customer_view_repairs(account):
     print_repair_list(my_repairs)
 
     pause()
-
-
+    
 def find_repair_by_receipt(receipt_no):
     for repair in repairs:
         if repair["receipt_no"] == receipt_no:
@@ -624,7 +623,6 @@ def main():
 
         else:
             print("\nInvalid choice. Please try again.")
-
 
 if __name__ == "__main__":
     main()
