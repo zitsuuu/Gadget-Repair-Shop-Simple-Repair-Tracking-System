@@ -283,67 +283,48 @@ def view_repairs():
         pause()
         return
 
-    page_size = 10
-    page = 0
+    print("\nReceipt No. | Customer | Gadget | Status")
+    print("----------------------------------------")
+
+    for repair in repairs:
+        print(
+            f"{repair['receipt_no']} | "
+            f"{repair['name']} | "
+            f"{repair['gadget']} | "
+            f"{repair['status']}"
+        )
 
     while True:
-        total_pages = (len(repairs) + page_size - 1) // page_size
-        start_index = page * page_size
-        page_repairs = repairs[start_index:start_index + page_size]
-
-        print(f"\nPage {page + 1} of {total_pages} | Total repairs: {len(repairs)}")
-        print("Receipt No. | Customer | Gadget | Status")
-        print("----------------------------------------")
-
-        for repair in page_repairs:
-            print(
-                f"{repair['receipt_no']} | "
-                f"{repair['name']} | "
-                f"{repair['gadget']} | "
-                f"{repair['status']}"
-            )
-
-        print("\nEnter a receipt number to view full details.")
-        print("N = Next page | P = Previous page | Q = Back to staff menu")
+        print("\nEnter a receipt number to view full details, or Q to go back.")
         choice = input("Choose an option: ").strip().lower()
 
-        if choice == "n":
-            if start_index + page_size < len(repairs):
-                page += 1
-            else:
-                print("\nYou are already on the last page.")
-        elif choice == "p":
-            if page > 0:
-                page -= 1
-            else:
-                print("\nYou are already on the first page.")
-        elif choice == "q":
+        if choice == "q":
             break
-        else:
-            try:
-                receipt_no = int(choice)
-                repair = find_repair_by_receipt(receipt_no)
 
-                if repair is None or repair not in page_repairs:
-                    print("\nThat receipt number is not on this page.")
-                    continue
+        try:
+            receipt_no = int(choice)
+            repair = find_repair_by_receipt(receipt_no)
 
-                print("\n--- FULL REPAIR INFORMATION ---")
-                print("Receipt Number:", repair["receipt_no"])
-                print("Customer:", repair["name"])
-                print("Gadget:", repair["gadget"])
-                print("\nRepair Problems:")
-                print(repair["problem"])
-                print("Total Cost: ₱", repair["cost"])
-                print("Status:", repair["status"])
-                print("Date & Time Added:", repair["date_time"])
+            if repair is None:
+                print("\nReceipt number not found. Please try again.")
+                continue
 
-                if repair["completed_time"]:
-                    print("Completed Date & Time:", repair["completed_time"])
+            print("\n--- FULL REPAIR INFORMATION ---")
+            print("Receipt Number:", repair["receipt_no"])
+            print("Customer:", repair["name"])
+            print("Gadget:", repair["gadget"])
+            print("\nRepair Problems:")
+            print(repair["problem"])
+            print("Total Cost: ₱", repair["cost"])
+            print("Status:", repair["status"])
+            print("Date & Time Added:", repair["date_time"])
 
-                pause()
-            except ValueError:
-                print("\nInvalid choice. Enter a receipt number, N, P, or Q.")
+            if repair["completed_time"]:
+                print("Completed Date & Time:", repair["completed_time"])
+
+            pause()
+        except ValueError:
+            print("\nInvalid choice. Enter a receipt number or Q.")
 
 def customer_view_repairs(account):
     print("\n--- MY REPAIR RECORDS ---")
