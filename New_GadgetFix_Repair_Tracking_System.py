@@ -292,31 +292,18 @@ def view_repairs():
         page_repairs = repairs[start_index:start_index + page_size]
 
         print(f"\nPage {page + 1} of {total_pages} | Total repairs: {len(repairs)}")
-        headers = [
-            ("Receipt No.", 12), ("Customer", 22),
-            ("Gadget", 20), ("Status", 22)
-        ]
-        line = "+" + "+".join("-" * (width + 2) for _, width in headers) + "+"
-        print(line)
-        print("|" + "|".join(
-            f" {title:<{width}} " for title, width in headers
-        ) + "|")
-        print(line)
+        print("Receipt No. | Customer | Gadget | Status")
+        print("----------------------------------------")
 
         for repair in page_repairs:
-            values = [
-                repair["receipt_no"],
-                repair["name"],
-                repair["gadget"],
-                repair["status"]
-            ]
-            print("|" + "|".join(
-                f" {str(value)[:width]:<{width}} "
-                for value, (_, width) in zip(values, headers)
-            ) + "|")
+            print(
+                f"{repair['receipt_no']} | "
+                f"{repair['name']} | "
+                f"{repair['gadget']} | "
+                f"{repair['status']}"
+            )
 
-        print(line)
-        print("Enter a receipt number to view full details.")
+        print("\nEnter a receipt number to view full details.")
         print("N = Next page | P = Previous page | Q = Back to staff menu")
         choice = input("Choose an option: ").strip().lower()
 
@@ -324,12 +311,12 @@ def view_repairs():
             if start_index + page_size < len(repairs):
                 page += 1
             else:
-                print("You are already on the last page.")
+                print("\nYou are already on the last page.")
         elif choice == "p":
             if page > 0:
                 page -= 1
             else:
-                print("You are already on the first page.")
+                print("\nYou are already on the first page.")
         elif choice == "q":
             break
         else:
@@ -337,12 +324,11 @@ def view_repairs():
                 receipt_no = int(choice)
                 repair = find_repair_by_receipt(receipt_no)
 
-                # Only allow selecting a receipt visible on the current page.
                 if repair is None or repair not in page_repairs:
                     print("\nThat receipt number is not on this page.")
                     continue
 
-                print("\n========== FULL REPAIR INFORMATION ==========")
+                print("\n--- FULL REPAIR INFORMATION ---")
                 print("Receipt Number:", repair["receipt_no"])
                 print("Customer:", repair["name"])
                 print("Gadget:", repair["gadget"])
@@ -355,10 +341,9 @@ def view_repairs():
                 if repair["completed_time"]:
                     print("Completed Date & Time:", repair["completed_time"])
 
-                print("=============================================")
                 pause()
             except ValueError:
-                print("Invalid choice. Enter a receipt number, N, P, or Q.")
+                print("\nInvalid choice. Enter a receipt number, N, P, or Q.")
 
 def customer_view_repairs(account):
     print("\n--- MY REPAIR RECORDS ---")
@@ -372,6 +357,7 @@ def customer_view_repairs(account):
     print_repair_list(my_repairs)
 
     pause()
+
 
 def find_repair_by_receipt(receipt_no):
     for repair in repairs:
@@ -638,6 +624,7 @@ def main():
 
         else:
             print("\nInvalid choice. Please try again.")
+
 
 if __name__ == "__main__":
     main()
